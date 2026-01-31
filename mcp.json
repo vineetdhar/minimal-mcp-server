@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "simple-mcp": {
+      "command": "node",
+      "args": ["C:\\DIR\\DIR\\mcp-demo\\server.js"]
+    }
+  }
+}
