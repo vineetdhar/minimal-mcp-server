@@ -105,12 +105,12 @@ Example tool definition:
 
 ## ✅ Summary
 
-This setup provides a fully functional MCP server with:
+* This setup provides a fully functional MCP server with:
 
-One tool (hello) that accepts a parameter.
+* One tool (hello) that accepts a parameter.
 
-No external dependencies.
+* No external dependencies.
 
-Full integration with Cursor IDE.
+* Full integration with Cursor IDE.
 
-Ideal for testing, learning, or building more advanced MCP workflows.
+* Ideal for testing, learning, or building more advanced MCP workflows.
