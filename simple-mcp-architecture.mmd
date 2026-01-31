@@ -1,0 +1,26 @@
+graph TD
+  CursorIDE["Cursor IDE"] -->|Launch MCP Server| MCPServer["MCP Server (`server.js`)"]
+  MCPServer -->|JSON-RPC over stdio| CursorIDE
+  MCPServer -->|Defines Tools| ToolHello["Tool: hello"]
+  CursorIDE -->|Call Tool| ToolHello
+  ToolHello -->|Returns Greeting| CursorIDE
+
+  subgraph Security
+    InputValidation["Input Validation"]
+    Authentication["Authentication (optional)"]
+    SecureCommunication["Secure Communication"]
+  end
+
+  subgraph Info
+    ProtocolVersion["Protocol Version: 2024-11-05"]
+    ServerVersion["Server Version: 1.0.0"]
+    CursorCompatibility["Cursor IDE MCP Loader Compatible"]
+  end
+
+  CursorIDE --> InputValidation
+  MCPServer --> InputValidation
+  MCPServer --> Authentication
+  MCPServer --> SecureCommunication
+  MCPServer --> ProtocolVersion
+  MCPServer --> ServerVersion
+  CursorIDE --> CursorCompatibility
