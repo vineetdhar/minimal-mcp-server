@@ -1,185 +1,116 @@
-# minimal-mcp-server
-Minimal MCP Server Setup for Cursor IDE
+# Minimal MCP Server Setup for Cursor IDE
 
 This guide walks through the simplest possible setup for a working MCP (Model Context Protocol) server that integrates with Cursor IDE. It requires no external packages, no SDKs, and no GitHub dependencies.
 
-🧱 Prerequisites
+## 🧱 Prerequisites
 
-Node.js installed (v18+ recommended)
+* Node.js installed (v18+ recommended)
 
-Cursor IDE installed
+* Cursor IDE installed
 
-A working project folder (e.g. C:\Users\PowerUser\mcp-demo)
+* A working project folder (e.g. C:\Users\PowerUser\mcp-demo)
 
-📁 Project Structure
+
+## 📁 Project Structure
 
 mcp-demo/
+
 ├── server.js
+
 └── mcp.json
 
-🧠 Step 1: Create server.js
+## Steps:
 
-This is a pure CommonJS MCP server using JSON-RPC over stdio. It defines one tool called hello that takes a name parameter.
+### 🧪 Step 1: Create >> server.js
 
-console.error(">>> SIMPLE MCP SERVER STARTED <<<");
+This file implements a pure CommonJS MCP server using JSON-RPC over stdio. It defines a single tool called hello that accepts a name parameter.
 
-const readline = require("readline");
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  terminal: false
-});
+### ⚙️ Step 2: Create >> mcp.json
 
-function send(msg) {
-  process.stdout.write(JSON.stringify(msg) + "\n");
-}
-
-rl.on("line", (line) => {
-  let msg;
-  try {
-    msg = JSON.parse(line);
-  } catch {
-    return;
-  }
-
-  if (msg.method === "initialize") {
-    send({
-      jsonrpc: "2.0",
-      id: msg.id,
-      result: {
-        protocolVersion: "2024-11-05",
-        serverInfo: { name: "simple-mcp", version: "1.0.0" },
-        capabilities: { tools: {} }
-      }
-    });
-  }
-
-  if (msg.method === "tools/list") {
-    send({
-      jsonrpc: "2.0",
-      id: msg.id,
-      result: {
-        tools: [
-          {
-            name: "hello",
-            description: "Returns a greeting",
-            inputSchema: {
-              type: "object",
-              properties: {
-                name: {
-                  type: "string",
-                  description: "Your name"
-                }
-              },
-              required: ["name"]
-            }
-          }
-        ]
-      }
-    });
-  }
-
-  if (msg.method === "tools/call" && msg.params?.name === "hello") {
-    const name = msg.params.arguments?.name || "stranger";
-    send({
-      jsonrpc: "2.0",
-      id: msg.id,
-      result: {
-        content: [
-          { type: "text", text: `Hello, ${name}!` }
-        ]
-      }
-    });
-  }
-});
-
-⚙️ Step 2: Create mcp.json
-
-This file registers the MCP server with Cursor.
-
-{
-  "servers": {
-    "simple-mcp": {
-      "command": "node",
-      "args": ["server.js"]
-    }
-  }
-}
+This file registers the MCP server with Cursor IDE.
 
 Place this file in the root of your project folder.
 
-🚀 Step 3: Launch in Cursor
 
-Open Cursor IDE
+### 🚀 Step 3: Launch in Cursor
 
-Open your project folder (mcp-demo)
+* Open Cursor IDE.
 
-Go to the MCP panel (left sidebar → ⚙️ icon)
+* Open your project folder (mcp-demo).
 
-You’ll see:
+* Navigate to the MCP panel (left sidebar → ⚙️ icon).
 
-simple-mcp
+* You should see:
 
-Tool: hello
+        simple-mcp
 
-💬 Step 4: Call the Tool
+        Tool: hello
 
-Option 1: From Chat
 
-Open the Chat tab (💬 icon in left sidebar) and type:
+### 💬 Step 4: Call the Tool
 
-/mcp simple-mcp.hello { "name": "<name>" }
 
-Option 2: From MCP Panel
+#### 1. Option 1: From Chat
 
-Click the hello tool → enter a name → click Run.
+Open the Chat tab (💬 icon in the left sidebar) and type:
 
-You’ll get:
+        /mcp simple-mcp.hello { "name": "<name>" }
 
-Hello, Vineet!
+#### 2. Option 2: From MCP Panel
 
-🧩 Notes
+Click the hello tool, enter a name, then click Run.
 
-No SDKs or packages are required
+You will receive:
 
-No GitHub dependencies
+        Hello, <name>!
 
-No ESM/CJS conflicts
 
-Fully compatible with Cursor’s MCP loader
+## 🥹 Notes
 
-🛠️ Extending the Server
+* No SDKs or packages are required.
 
-You can add more tools by:
+* No GitHub dependencies.
 
-Adding entries to the tools/list response
+* No ESM/CJS conflicts.
 
-Handling them in the tools/call block
+* Fully compatible with Cursor’s MCP loader.
 
-Example:
 
-{
-  name: "add",
-  description: "Adds two numbers",
-  inputSchema: {
-    type: "object",
-    properties: {
-      a: { type: "number" },
-      b: { type: "number" }
-    },
-    required: ["a", "b"]
-  }
-}
+## 🔧 Extending the Server
 
-✅ Summary
+Add more tools by:
 
-This setup gives you a fully working MCP server with:
+Adding entries to the tools/list response.
 
-One tool (hello) that takes a parameter
+Handling them in the tools/call block.
 
-No external dependencies
+Example tool definition:
 
-Full Cursor IDE integration
+        
+        {
+          name: "add",
+          description: "Adds two numbers",
+          
+          inputSchema: {  
+            type: "object",    
+            properties: {    
+              a: { type: "number" },      
+              b: { type: "number" }      
+            },    
+            required: ["a", "b"]    
+          }  
+        }
 
-Perfect for testing, learning, or building more advanced MCP workflows.
+
+## ✅ Summary
+
+This setup provides a fully functional MCP server with:
+
+One tool (hello) that accepts a parameter.
+
+No external dependencies.
+
+Full integration with Cursor IDE.
+
+Ideal for testing, learning, or building more advanced MCP workflows.
