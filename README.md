@@ -81,9 +81,9 @@ You will receive:
 
 Add more tools by:
 
-Adding entries to the tools/list response.
+* Adding entries to the tools/list response.
 
-Handling them in the tools/call block.
+* Handling them in the tools/call block.
 
 Example tool definition:
 
